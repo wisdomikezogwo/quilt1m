@@ -100,7 +100,12 @@ def save_frame_chunks_recon(video, stable_se_times, id_, fps, height, width):
     if isinstance(video, str):
         video = cv2.VideoCapture(video)
     
-    for index_, (clip_start_time, clip_end_time) in enumerate(stable_se_times):
+    for index_, start_end_time in enumerate(stable_se_times):
+        if not start_end_time:
+            median_frames.append(None)
+            continue
+        clip_start_time, clip_end_time = start_end_time
+        
         fixed_frame_start = clip_start_time
         # 0-based index of the frame to be decoded/captured next.
         video.set(cv2.CAP_PROP_POS_FRAMES,

@@ -20,14 +20,11 @@ parser = argparse.ArgumentParser('Reconstruct Quilt')
 parser.add_argument('--base_dir', default='./quilt', #'convnext_tiny_384_in22ft1k',#
                     type=str, help='base directory for data')
 
-parser.add_argument('--recon_csv_path', default='./quilt/quilt_data_df.csv',
+parser.add_argument('--data_csv', default='data_df.csv',
                     type=str, help='path to per video_id reconstruction data in csv file')
 
-parser.add_argument('--recon_csv_path', default='./quilt/quilt_recon_df.csv',
+parser.add_argument('--recon_csv', default='recon_df.csv',
                     type=str, help='path to per image-(text) pair csv file')
-
-parser.add_argument('--image_dir', default='./quilt/frames', #'convnext_tiny_384_in22ft1k',#
-                    type=str, help='path to save extracted Quilt images')
 
 parser.add_argument('--network', default='convnext_tiny.fb_in22k_ft_in1k_384', #'convnext_tiny_384_in22ft1k',#
                     type=str, help='name of pretrained network to use')
@@ -66,7 +63,10 @@ def main(args, data_df, recon_df, device, histo_models_dict, video_paths_dict):
             rep_chunk_im_temp = save_frame_chunks_recon(video_path, stable_times, chunk_id,fps, height, width)
 
             # cleanup with histo classifier
-            for idx, img in enumerate(rep_chunk_im_temp):
+            for idx , img in enumerate(rep_chunk_im_temp):
+                if img is None:
+                    continue
+
                 img_pil = Image.fromarray(cv2.cvtColor(np.copy(img), cv2.COLOR_BGR2RGB))
                 pred_histo = 0
                 for name, histo_model in histo_models_dict.items():
@@ -122,7 +122,10 @@ def main(args, data_df, recon_df, device, histo_models_dict, video_paths_dict):
             df_chunk_image_names = temp_df[temp_df['chunk_id'] == chunk_id]['image_path'].tolist()
             rep_images = rep_chunks_image_paths[chunk_id]
             for name_idx, names in enumerate(df_chunk_image_names):
-                name_image_dict[names] = rep_images[name_idx]
+                try:
+                    name_image_dict[names] = rep_images[name_idx]
+                except:
+                    pass
         
         for img_name, img_object in name_image_dict.items():
             if type(img_object) != Image.Image:
@@ -140,7 +143,7 @@ if __name__ == '__main__':
     BASE_DIR = args.base_dir
     VIDEO_DIR = os.path.join(BASE_DIR, "videos")
     FRAMES_DIR = os.path.join(BASE_DIR, "frames")
-    args.model_dir = MODELS_DIR = os.path.join(BASE_DIR, "models") 
+    args.model_dir = MODELS_DIR = os.path.join(BASE_DIR, "histo_models") 
 
     if not os.path.exists(FRAMES_DIR):
         Path(FRAMES_DIR).mkdir(parents=True, exist_ok=True)
@@ -152,12 +155,22 @@ if __name__ == '__main__':
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     # load model for histo classification of frames
-    histo_models_names = [f'{MODELS_DIR}/histo_cyto_idc_checkpoint.pth.tar',
-                        f'{MODELS_DIR}/histo_all_inclusive_checkpoint.pth.tar']
+    histo_models_names = [f'{MODELS_DIR}/cyto_histo.pth.tar',
+                        f'{MODELS_DIR}/all_inclusive.pth.tar']
     histo_models_dict = get_model_ensemble(args, histo_models_names, device)
 
     recon_df = pd.read_csv(os.path.join(BASE_DIR, 'recon_df.csv')
     data_df = pd.read_csv(os.path.join(BASE_DIR, 'data_df.csv'))
 
     main(args, data_df, recon_df, device, histo_models_dict, video_paths_dict)
+
+    # After all images have been saved, clean csv of all image-only rows
+    # post process to only extract rows of data_df with 
+    data_df = data_df[data_df['it_pair']==True]
+    data_df['medical_text'] = data_df['medical_text'].apply(ast.literal_eval)
+    data_df = data_df.explode('medical_text')
+    data_df.to_csv(os.path.join(BASE_DIR, 'data_df.csv'))
+
+    # ToDo: add code to remove all rows with no image found.
+
     
