@@ -159,8 +159,8 @@ if __name__ == '__main__':
                         f'{MODELS_DIR}/all_inclusive.pth.tar']
     histo_models_dict = get_model_ensemble(args, histo_models_names, device)
 
-    recon_df = pd.read_csv(os.path.join(BASE_DIR, 'recon_df.csv')
-    data_df = pd.read_csv(os.path.join(BASE_DIR, 'data_df.csv'))
+    recon_df = pd.read_csv(os.path.join(BASE_DIR, 'quilt_recon.csv')
+    data_df = pd.read_csv(os.path.join(BASE_DIR, 'quilt_data.csv'))
 
     main(args, data_df, recon_df, device, histo_models_dict, video_paths_dict)
 
@@ -168,9 +168,13 @@ if __name__ == '__main__':
     # post process to only extract rows of data_df with 
     data_df = data_df[data_df['it_pair']==True]
     data_df['medical_text'] = data_df['medical_text'].apply(ast.literal_eval)
+    
+    # explode data over the medical text
     data_df = data_df.explode('medical_text')
-    data_df.to_csv(os.path.join(BASE_DIR, 'data_df.csv'))
 
-    # ToDo: add code to remove all rows with no image found.
+    #save
+    data_df.to_csv(os.path.join(BASE_DIR, 'quilt_data_df.csv'))
+
+    # ToDo: add code to remove all rows (i.e chunks) with no image found.
 
     

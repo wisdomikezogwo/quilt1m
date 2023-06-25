@@ -3,7 +3,7 @@
 
 ![teaser](aux/quilt_main_img.jpeg "teaser")
 
-### [Paper]() | [Huggingface Demo](https://huggingface.co/wisdomik/QuiltNet-B-32) 
+### [Paper](https://arxiv.org/pdf/2306.11207.pdf) | [Huggingface Demo](https://huggingface.co/wisdomik/QuiltNet-B-32) 
 
 
 ## Abstract
@@ -11,7 +11,9 @@
 >
 ## News
 - [x] *2023-03-03* Upated repository with links to models and data.
-- [x] *2023-06-13* Inital ccode/data release .
+- [x] *2023-06-13* Inital ccode/data release.
+- [x] *2023-06-25* Added model evaluate tips and added some new data links.
+
 
 
 ## Requirements
@@ -21,16 +23,27 @@ conda create --name quilt python=3.9 && conda activate quilt
 Then install [requirements/](data/requirements.txt)
 
 
+## Data
+To collect Quilt, follow these [data steps/](data/README.md)
+
+
+## Eval
+To evaluate QuiltNet, follow these [steps/](eval/README.md)
+
+
 
 ## Pretrained Model
 We provide the checkpoints for all QuiltNet finetuned models.
-[ViT-B-32|GPT77/](https://huggingface.co/wisdomik/QuiltNet-B-32)
-[ViT-B-16|GPT77/](https://huggingface.co/wisdomik/QuiltNet-B-32)
-[ViT-B-16|PMB256/](https://huggingface.co/wisdomik/QuiltNet-B-16-PMB)
+
+- [ViT-B-32|GPT77](https://huggingface.co/wisdomik/QuiltNet-B-32).
+- [ViT-B-16|GPT77](https://huggingface.co/wisdomik/QuiltNet-B-32).
+- [ViT-B-16|PMB-256](https://huggingface.co/wisdomik/QuiltNet-B-16-PMB).
 
 
 ## Testing
 Visualization of inputs and output:
+
+![](aux/barchart_zeroshot.png)
 
 ![](aux/clip_heatmap.png)
 
@@ -38,11 +51,13 @@ Visualization of inputs and output:
 ## Citing Quilt-1M
 
 ```
-@inproceedings{ikezogwo2023quilt,
-  title={Quilt-1M: One Million Image-Text Pairs for Histopathology},
-  author={Wisdom O. Ikezogwo, Mehmet S. Seyfioglu, Fatemeh Ghezloo, Dylan Geva , Fatwir S. Mohammed, Pavan K. Anand, Ranjay Krishna, Linda G. Shapiro.},
-  booktitle={###},
-  year={###}
+@misc{ikezogwo2023quilt1m,
+      title={Quilt-1M: One Million Image-Text Pairs for Histopathology}, 
+      author={Wisdom Oluchi Ikezogwo and Mehmet Saygin Seyfioglu and Fatemeh Ghezloo and Dylan Stefan Chan Geva and Fatwir Sheikh Mohammed and Pavan Kumar Anand and Ranjay Krishna and Linda Shapiro},
+      year={2023},
+      eprint={2306.11207},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
 }
 
 ```
