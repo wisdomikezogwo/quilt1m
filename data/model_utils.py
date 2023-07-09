@@ -1,5 +1,6 @@
 import os
 import torch
+import torch.nn as nn
 from collections import OrderedDict
 from PIL import ImageFile, Image
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -7,7 +8,6 @@ import torchvision.transforms as transforms
 import torchvision.models as models
 from timm.models import create_model
 import vision_transformer as vits
-
 
 has_native_amp = False
 try:
@@ -20,7 +20,6 @@ if torch.cuda.is_available():
     torch.backends.cuda.matmul.allow_tf32 = True
     torch.backends.cudnn.benchmark = True
     torch.backends.cudnn.benchmark = True
-
 
 
 class LinearClassifier(nn.Module):
@@ -221,14 +220,12 @@ def crop_center(images_tensor, crop_size):
 
 def get_dino_model(pretrained_weights, device='cuda', model_key='teacher', lin_key='state_dict', arch='vit_small',
                    patch_size=16, n=4, avg_pool=False):
-    
-
     model = vits.__dict__[arch](patch_size, num_classes=0)
     embed_dim = model.embed_dim * (n + int(avg_pool))
     model.to(device)
 
     # load weights to evaluate
-    utils.load_pretrained_weights(model, '', model_key, arch, patch_size)
+    load_pretrained_weights(model, '', model_key, arch, patch_size)
 
     linear_classifier = LinearClassifier(embed_dim, num_labels=2)
     linear_classifier = linear_classifier.to(device)
@@ -278,7 +275,6 @@ def single_vit_inference(model, linear_classifier, image, input_size=384, crop_s
     return pred
 
 
-
 def get_model_ensemble(args, histo_models_names, device):
     histo_models_dict = {}
     for indx, histo_pth in enumerate(histo_models_names):
@@ -291,4 +287,3 @@ def get_model_ensemble(args, histo_models_names, device):
 
     histo_models_dict['dino'] = (model, linear_classifier)
     return histo_models_dict
-

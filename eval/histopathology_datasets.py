@@ -1,21 +1,8 @@
 import os
-import sys
-import json
 import glob
-import PIL
-import warnings
-from pathlib import Path
-import numpy as np
 import torch
-from torchvision import datasets
-from torchvision.transforms import Compose
-
-from subprocess import call
-from collections import defaultdict
-from torch.utils.data import default_collate
 from PIL import Image
 import pandas as pd
-from torchvision.datasets import ImageFolder, PCAM
 
 
 class MhistDataset(torch.utils.data.Dataset):
@@ -107,7 +94,6 @@ class ArchCsvDataset(torch.utils.data.Dataset):
         self.captions = df[caption_key].tolist()
         self.transforms = transforms
         self.ids = list(sorted(df['ids'].tolist()))
-
 
     def __len__(self):
         return len(self.captions)
@@ -217,4 +203,3 @@ class SkinDataset(torch.utils.data.Dataset):
             label = self.tumor_map[self.labels[index]]
 
         return image, label
-

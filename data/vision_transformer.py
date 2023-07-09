@@ -16,6 +16,7 @@ Mostly copy-paste from timm library.
 https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
 """
 import math
+import warnings
 from functools import partial
 
 import torch

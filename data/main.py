@@ -4,6 +4,7 @@ import cv2
 import glob
 import copy
 import torch
+import argparse
 import numpy as np
 import pandas as pd
 from PIL import Image
@@ -13,11 +14,10 @@ from model_utils import (get_model_ensemble, single_clf_inference, single_vit_in
 from data_utils import (get_histo_srt_im_recon, save_frame_chunks_recon)
 
 
-
 # Construct the argument parser
 parser = argparse.ArgumentParser('Reconstruct Quilt')
 
-parser.add_argument('--base_dir', default='./quilt', #'convnext_tiny_384_in22ft1k',#
+parser.add_argument('--base_dir', default='./quilt',
                     type=str, help='base directory for data')
 
 parser.add_argument('--data_csv', default='data_df.csv',
@@ -26,7 +26,7 @@ parser.add_argument('--data_csv', default='data_df.csv',
 parser.add_argument('--recon_csv', default='recon_df.csv',
                     type=str, help='path to per image-(text) pair csv file')
 
-parser.add_argument('--network', default='convnext_tiny.fb_in22k_ft_in1k_384', #'convnext_tiny_384_in22ft1k',#
+parser.add_argument('--network', default='convnext_tiny.fb_in22k_ft_in1k_384',  # 'convnext_tiny_384_in22ft1k'
                     type=str, help='name of pretrained network to use')
 parser.add_argument('--histo_classes', default=2, type=int,
                     help='histo_classes')
@@ -131,10 +131,7 @@ def main(args, data_df, recon_df, device, histo_models_dict, video_paths_dict):
             if type(img_object) != Image.Image:
                 img_object = Image.fromarray(cv2.cvtColor(np.copy(img_object), cv2.COLOR_BGR2RGB))
             im_path = os.path.join(FRAMES_DIR, img_name)
-            img_object.save(im_path) 
-
-
-
+            img_object.save(im_path)
 
 
 if __name__ == '__main__':
@@ -151,7 +148,6 @@ if __name__ == '__main__':
     video_paths = glob.glob(os.path.join(VIDEO_DIR, '*', '*.mp4'))
     video_paths_dict = {os.path.splitext(os.path.basename(video_path))[0]: video_path for video_path in video_paths}
 
-
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     # load model for histo classification of frames
@@ -159,7 +155,7 @@ if __name__ == '__main__':
                         f'{MODELS_DIR}/all_inclusive.pth.tar']
     histo_models_dict = get_model_ensemble(args, histo_models_names, device)
 
-    recon_df = pd.read_csv(os.path.join(BASE_DIR, 'quilt_recon.csv')
+    recon_df = pd.read_csv(os.path.join(BASE_DIR, 'quilt_recon.csv'))
     data_df = pd.read_csv(os.path.join(BASE_DIR, 'quilt_data.csv'))
 
     main(args, data_df, recon_df, device, histo_models_dict, video_paths_dict)
