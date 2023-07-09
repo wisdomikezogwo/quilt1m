@@ -12,7 +12,7 @@ scipy==1.7.1
 sentence-transformers==2.2.2
 six==1.16.0
 spacy[cuda113]==3.4.4
-tensorflow==2.10.0
+tensorflow==2.11.1
 timm==0.8.6.dev0
 torch==1.12.1+cu113
 torchsampler==0.1.1
