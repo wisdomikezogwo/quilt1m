@@ -1,5 +1,5 @@
 # Quilt
-[Quilt-1M: One Million Image-Text Pairs for Histopathology](https://quilt1m.github.io/)
+[Quilt-1M: One Million Image-Text Pairs for Histopathology](https://quilt1m.github.io/) [NeurIps 2023] (Oral)
 
 ![teaser](aux/quilt_main_img.jpeg "teaser")
 
@@ -11,9 +11,12 @@
 >
 ## News
 - [x] *2023-03-03* Upated repository with links to models and data.
-- [x] *2023-06-13* Inital ccode/data release.
+- [x] *2023-06-13* Initial code/data release.
 - [x] *2023-06-25* Added model evaluate tips and added some new data links.
 - [x] *2023-08-15* Added restricted access to complete dataset.
+- [x] *2023-09-21* QUILT-1M is accepted to NeurIPS 2023 [ORAL] 🔥.
+- [x] *2023-10-26* Corrected sub-pathology column in quilt_1M_lookup csv file, as well as, Added additional columns ('single_wsi': 1-for videos that only cover one WSI or 0-more than one WSI, 'not_histology': manual checks of videos stratified into 0 or 1 with causes of 1 being image projections, drawings or strictly not histo due to false classification videos etc)
+- [x] * *2023-10-27* Updated Arxiv paper.
 
 
 ## Data (QUILT-1M) Restricted Access
