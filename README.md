@@ -17,7 +17,7 @@
 - [x] *2023-09-21* QUILT-1M is accepted to NeurIPS 2023 [ORAL] 🔥.
 - [x] *2023-10-26* Corrected sub-pathology column in quilt_1M_lookup csv file, as well as, Added additional columns ('single_wsi': 1-for videos that only cover one WSI or 0-more than one WSI, 'not_histology': manual checks of videos stratified into 0 or 1 with causes of 1 being image projections, drawings or strictly not histo due to false classification videos etc)
 - [x] * *2023-10-27* Updated Arxiv paper.
-
+- [x] * *2024-01-17* Quilt-LLAVA [Paper](https://arxiv.org/abs/2312.04746), [Website](https://quilt-llava.github.io/) is released, a Large Language and Vision Assistant for #Pathology trained with spatially localized instruction tuning data generated from educational #YouTube videos, outperforming SOTA in various tasks. Models and data to be released soon. 
 
 ## Data (QUILT-1M) Restricted Access
 Two versions of the data can be accessed after agreeing to certain terms, protecting against further distribution of the dataset and committing to its specified research use.
